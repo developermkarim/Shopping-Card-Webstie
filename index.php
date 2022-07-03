@@ -1,7 +1,6 @@
-
-
-
-  <!-- Displaying Products Start -->
+<?php include('common.php');
+?>
+<!-- Displaying Products Start -->
   <div class="container">
     <div id="message"></div>
     <div class="row mt-2 pb-3">
@@ -52,10 +51,10 @@
   <script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js'></script>
 
   <script type="text/javascript">
-  $(document).ready(function() {
+  $(document).ready(function(){
 
     // Send product details in the server
-    $(".addItemBtn").click(function(e) {
+    $(".addItemBtn").click(function(e){
       e.preventDefault();
       var $form = $(this).closest(".form-submit");
       var pid = $form.find(".pid").val();
@@ -79,10 +78,25 @@
         },
         success: function(response) {
           $("#message").html(response);
+          load_cart_count();
         
         }
       });
     });
+
+    // calling the cart function here
+    load_cart_count();
+
+    function load_cart_count(){
+        $.ajax({
+            method:'get',
+            url:'action.php',
+            data:{cartItem:'cart_items'},
+            success: function(response_cart){
+                $('#cart-item').html(response_cart);
+            }
+        })
+    }
 
   });
   </script>

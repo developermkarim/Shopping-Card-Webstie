@@ -31,5 +31,15 @@ if (!$code) {
 						  <strong>Item already added to your cart!</strong>
 						</div>';
 	  }
-	}
+	};
+
+    // this is for cart count in the cart box
+     if (isset($_GET['cartItem']) && $_GET['cartItem'] == 'cart_items') {
+        
+        $stmt = $conn->prepare('select * from cart');
+        $stmt->execute();
+        $stmt->store_result(); // this is for total count of products
+        $rowcount = $stmt->num_rows();
+        echo $rowcount;
+      }
 ?>

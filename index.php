@@ -35,5 +35,58 @@
       </ul>
     </div>
   </nav>
+
+  <!-- Product Show here with card system of bootstrap -->
+
+  <div class="container">
+    <div id="message"></div>
+    <div class="row mt-2 pb-3">
+        <?php
+        include('Config.php');
+        $stmt = $conn->prepare('select * from product');
+        $execute = $stmt->execute();
+        $result = $stmt->get_result();
+        while($row = $result->fetch_assoc()){
+        ?>
+          <div class="col-sm-6 col-md-4 col-lg-3 mb-2">
+        <div class="card-deck">
+          <div class="card p-2 border-secondary mb-2">
+            <!-- This Image read from database but not from image directory -->
+            <img src="<?= $row['product_image'];?>" alt="Product Image" height="250px">
+            <div class="card-body p-1">
+              <h4 class="card-title text-center text-info"><?= $row['product_name'] ?></h4>
+              <h5 class="card-text text-center text-danger"><span style="font-size: 30px;font-weight: 700;">৳</span> <?= number_format($row['product_price'],2) ?>  /- </h5>
+
+            </div>
+            <!-- Card Footer part -->
+            <div class="row p-2">
+                <form action="" method="POST">
+
+               
+                  <div class="col-md-6 py-1 pl-4">
+                    <b>Quantity : </b>
+                  </div>
+                  <div class="col-md-6">
+                <input type="number" class="form-control pqty" value="<?= $row['product_qty']?>">
+                  </div>
+                  <div>
+                    <input type="hidden" name="pid" <?= $row['id']?>>
+                    <input type="hidden" name="pname" <?= $row['product_name']?>>
+                    <input type="hidden" name="pprice" <?= $row['product_price']?>>
+                    <input type="hidden" name="pimage" <?= $row['product_image']?>>
+                    <input type="hidden" name="pcode" <?= $row['product_code']?>>
+                    <button class="btn btn-info btn-block addItemBtn"> <i class="fas fa-cart-plus"></i> &nbsp;&nbsp;Add to
+                  cart</button>
+                  </div>
+                  </form>
+                  </div>
+        </div>
+        </div>  
+        </div>  
+
+        <!-- While loop finish here -->
+        <?php } ?>
+    </div>
+    </div>
  </body>
 </html>

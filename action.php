@@ -64,4 +64,23 @@ if (!$code) {
             $_SESSION['msg'] = 'Item removed from the cart!';
           header('location:cart.php');
           }
+        
+
+
+          if (isset($_POST['pdqty'])) {
+            $qty = $_POST['pdqty'];
+            $pid = $_POST['pdid'];
+            $pprice = $_POST['pdprice'];
+            $quantityprice =  $pprice*$qty;
+            $stmt = $conn->prepare("UPDATE cart set qty=?,total_price=? where id=?");
+            $stmt->bind_param('isi',$qty,$quantityprice,$pid);
+            $stmt->execute();
+
+            // $tprice = $qty * $pprice;
+            // $stmt = $conn->prepare('UPDATE cart SET qty=?, total_price=? WHERE id=?');
+            // $stmt->bind_param('isi',$qty,$tprice,$pid);
+            // $stmt->execute();
+
+          }
+          
 ?>

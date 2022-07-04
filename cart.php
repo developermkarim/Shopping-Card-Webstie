@@ -23,7 +23,7 @@
             <th>Quantity</th>
             <th>Total Price</th>
             <th>
-              <a href="action.php?clear=all" class="badge-danger badge p-1" onclick="return confirm('Are you sure want to clear your cart?');"><i class="fas fa-trash"></i>&nbsp;&nbsp;Clear Cart</a>
+              <a  href="action.php?clear=all&nothing=nofound" class="badge-danger badge p-1" onclick="return confirm('Are you sure want to clear your cart?');"><i class="fas fa-trash"></i>&nbsp;&nbsp;Clear Cart</a>
             </th>
           </tr>
         </thead>
@@ -37,17 +37,21 @@
            while ($row = $res->fetch_assoc()){ 
           
           ?>
+
           <tr>
             <!-- We will hidden type the inputs with the values which are need to use in next page. -->
             <td><?= $row['id'] ?></td>
-            <input type="hidden" class="pid" value="<?= $row['id'] ?>">
+            <!-- This hidden input to use the cart price with quantity -->
+            <input type="hidden" class="pid" value="<?= $row['id'] ?>"> 
             <td><img src="<?= $row['product_image'] ?>" width="50"></td>
             <td><?= $row['product_name'] ?></td>
             <td>
               <i class="fas fa-rupee-sign"></i>&nbsp;&nbsp;<?= number_format($row['product_price'],2); ?>
             </td>
+            <!-- This is for cart price update after increasing the products -->
             <input type="hidden" class="pprice" value="<?= number_format($row['product_price'],2) ?>">
             <td>
+              <!-- We can control here to increase the quantiy as we wish -->
               <input type="number" class="form-control itemQty" value="<?= $row['qty'] ?>" style="width:75px;">
             </td>
             <td>
@@ -75,6 +79,7 @@
         
         </tbody>
       </table>
+      <div id="qty_price"></div>
     </div>
   </div>
 </div>
@@ -84,28 +89,81 @@
 <script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js'></script>
 
 <script type="text/javascript">
-$(document).ready(function(){
-    $('.itemQty').change(function(){
-        var $el = $(this).closest('tr');
-        var price = $el.find('.pprice').val();
-        var id = $el.find('.pid').val();
-        var quantity = $el.find('.itemQty').val();
 
-        $.ajax({
-            url:'action.php',
-            method:'post',
-            data:{
-                pprice:price,
-                pqty: quantity,
-                pid: id
-            },
-            success:function(response){
-               console.log(response);
-            }
-        })
-    })
-})
+// $(document).ready(function(){
+//  $('.itemQty').on('change',function(){
+//  var $el = $(this).closest('tr');
+//  var id = $el.find('.pid').val();
+//  var quantity = $el.find('.itemQty').val();
+//  var price = $el.find('.pprice').val();
+//  location.reload(true);
+//  $.ajax({
+//   url:'action.php',
+//   method:'post',
+//   cache:false,
+//   data:{pid:id,pprice:price,qty:quantity},
+//   success: function(response){
+//     // $('#qty_price').html(response);
+//     console.log(response);
+//   }
+//  })
+//  })
+
+//  load_cart_item();
+//  function load_cart_item(){
+//   $.ajax({
+//     url:'action.php',
+//     method:'get',
+//     data:{cartItem : 'cart_items'},
+//     success: function(response){
+//       $('#cart-item').html(response);
+//     }
+//   })
+//  }
+// })
 </script>
+<script type="text/javascript">
+  $(document).ready(function() {
+
+    // Change the item quantity
+    $(".itemQty").on('change', function() {
+      var el = $(this).closest('tr');
+      var pid = el.find(".pid").val();
+      var pprice = el.find(".pprice").val();
+      var qty = el.find(".itemQty").val();
+      location.reload(true);
+      $.ajax({
+        url: 'action.php',
+        method: 'post',
+        cache: false,
+        data: {
+          pdqty: qty,
+          pdid: pid,
+          pdprice: pprice
+        },
+        success: function(response) {
+          console.log(response);
+        }
+      });
+    });
+
+    // Load total no.of items added in the cart and display in the navbar
+    load_cart_item_number();
+
+    function load_cart_item_number() {
+      $.ajax({
+        url: 'action.php',
+        method: 'get',
+        data: {
+          cartItem: "cart_items"
+        },
+        success: function(response) {
+          $("#cart-item").html(response);
+        }
+      });
+    }
+  });
+  </script>
 </body>
 
 </html>

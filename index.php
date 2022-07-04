@@ -47,9 +47,6 @@
   </div>
   <!-- Displaying Products End -->
 
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js'></script>
-
   <script type="text/javascript">
   $(document).ready(function(){
 
@@ -78,26 +75,23 @@
         },
         success: function(response) {
           $("#message").html(response);
-          load_cart_count();
+          all_added_cart_count();
         
         }
       });
     });
 
-    // calling the cart function here
-    load_cart_count();
-
-    function load_cart_count(){
-        $.ajax({
-            method:'get',
-            url:'action.php',
-            data:{cartItem:'cart_items'},
-            success: function(response_cart){
-                $('#cart-item').html(response_cart);
-            }
-        })
+    all_added_cart_count();
+    function  all_added_cart_count(){
+      $.ajax({
+        url:'action.php',
+        method:'get',
+        data:{cartItem:'cart_items'},
+        success: function(response){
+          $('#cart-item').html(response);
+        }
+      })
     }
-
   });
   </script>
 </body>

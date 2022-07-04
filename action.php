@@ -2,7 +2,7 @@
 session_start();
 include('Config.php');
 	// Add products into the cart table
-	if (isset($_POST['pid'])) {
+	if (isset($_POST['pid'])){
         $pid = $_POST['pid'];
         $pname = $_POST['pname'];
         $pprice = $_POST['pprice'];
@@ -76,9 +76,37 @@ if (!$code) {
             $stmt = $conn->prepare("UPDATE cart set qty=?,total_price=? where id=?");
             $stmt->bind_param('isi',$qty,$totalprice,$pid);
             $stmt->execute();
-
           }
 
-         
+           if (isset($_POST['action']) && $_POST['action'] == 'order') {
+    // this post value collect from main form element descendant by calling data: $('form).seriallise()
+            $name = $_POST['name'];
+            $email = $_POST['email'];
+            $phone = $_POST['phone'];
+            $address = $_POST['address'];
+            $price_mode = $_POST['pmode'];
+            $products = $_POST['products']; // this taken from hidden input
+            $total_paid = $_POST['grand_total']; // this also taken form hidden input of grand total;
+            $data = '';
+            $stmt = $conn->prepare("INSERT INTO orders(name,email,phone,address,pmode,products,amount_paid) VALUES(?,?,?,?,?,?,?)");
+            $stmt->bind_param('sssssss',$name,$email,$phone,$address,$price_mode,$products,$total_paid);
+            $stmt->execute();
+            $stmt2 = $conn->prepare("DELETE FROM cart");
+            $stmt2->execute();
+              $data .= '<div class="text-center">
+            <h1 class="display-4 mt-2 text-danger">Thank You!</h1>
+            <h2 class="text-success">Your Order Placed Successfully!</h2>
+            <h4 class="bg-danger text-light rounded p-2">Items Purchased : ' . $products . '</h4>
+            <h4>Your Name : ' . $name . '</h4>
+            <h4>Your E-mail : ' . $email . '</h4>
+            <h4>Your Phone : ' . $phone . '</h4>
+            <h4>Total Amount Paid : ' . number_format($total_paid,2) . '</h4>
+            <h4>Payment Mode : ' . $total_paid . '</h4>
+          </div>';
+          echo $data;
+
           
+
+            }
+
 ?>

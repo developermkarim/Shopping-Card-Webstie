@@ -1,4 +1,5 @@
 <?php
+session_start();
 include('Config.php');
 	// Add products into the cart table
 	if (isset($_POST['pid'])) {
@@ -42,4 +43,15 @@ if (!$code) {
         $rowcount = $stmt->num_rows();
         echo $rowcount;
       }
+
+       if (isset($_GET['remove'])) {
+        $removeid = $_GET['remove'];
+          $stmt = $conn->prepare('delete from cart where id=?');
+          $stmt->bind_param('i',$removeid);
+          $stmt->execute();
+          $_SESSION['msg-css-value'] = "block";
+          $_SESSION['msg'] = 'Item removed from the cart!';
+          header('location:cart.php');
+
+        }
 ?>

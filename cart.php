@@ -2,6 +2,11 @@
 <div class="container">
 <div class="row justify-content-center">
   
+      <div style="display:<?php if(isset($_SESSION['msg-css-value'])){echo $_SESSION['msg-css-value'];unset($_SESSION['msg-css-value']);}else echo 'none' ?>;" class="alert alert-success alert-dismissible mt-2">
+						  <button type="button" class="close" data-dismiss="alert">&times;</button>
+						  <strong><?php if(isset($_SESSION['msg']))echo $_SESSION['msg'];unset($_SESSION['msg']); ?></strong>
+						</div>
+
     <div class="table-responsive mt-2">
       <table class="table table-bordered table-striped text-center">
         <thead>
@@ -48,7 +53,7 @@
             <td>
                 <i class="fas fa-rupee-sign"></i>&nbsp;&nbsp;<?= number_format($row['total_price'],2) ?></td>
             <td>
-              <a href="action.php?remove<?php $row['id']; ?>" class="text-danger lead" onclick="return confirm('Are you sure want to remove this item?');"><i class="fas fa-trash-alt"></i></a>
+              <a href="action.php?remove=<?= $row['id']; ?>" class="text-danger lead" onclick="return confirm('Are you sure want to remove this item?');"><i class="fas fa-trash-alt"></i></a>
             </td>
           </tr>
         
@@ -92,10 +97,10 @@ $(document).ready(function(){
             data:{
                 pprice:price,
                 pqty: quantity,
-                ptotal: grand_total
+                pid: id
             },
             success:function(response){
-                $().html(response);
+               console.log(response);
             }
         })
     })

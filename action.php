@@ -44,6 +44,7 @@ if (!$code) {
         echo $rowcount;
       }
 
+      // single cart item delete here
        if (isset($_GET['remove'])) {
         $removeid = $_GET['remove'];
           $stmt = $conn->prepare('delete from cart where id=?');
@@ -54,4 +55,13 @@ if (!$code) {
           header('location:cart.php');
 
         }
+
+        // all cart item delete together
+         if (isset($_GET['clear']) and $_GET['clear'] == 'all') {
+            $stmt = $conn->prepare('delete from cart');
+            $stmt->execute();
+            $_SESSION['msg-css-value'] = 'block';
+            $_SESSION['msg'] = 'Item removed from the cart!';
+          header('location:cart.php');
+          }
 ?>

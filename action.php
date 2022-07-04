@@ -67,20 +67,18 @@ if (!$code) {
         
 
 
-          if (isset($_POST['pdqty'])) {
-            $qty = $_POST['pdqty'];
-            $pid = $_POST['pdid'];
-            $pprice = $_POST['pdprice'];
-            $quantityprice =  $pprice*$qty;
+          if (isset($_POST['pd_qty'])) {
+            $qty = $_POST['pd_qty'];
+            $pid = $_POST['pd_id'];
+            $pprice = $_POST['pd_price'];
+            $totalprice =  $qty * $pprice;
+            // $totalprice = number_format($totalprice,2);
             $stmt = $conn->prepare("UPDATE cart set qty=?,total_price=? where id=?");
-            $stmt->bind_param('isi',$qty,$quantityprice,$pid);
+            $stmt->bind_param('isi',$qty,$totalprice,$pid);
             $stmt->execute();
 
-            // $tprice = $qty * $pprice;
-            // $stmt = $conn->prepare('UPDATE cart SET qty=?, total_price=? WHERE id=?');
-            // $stmt->bind_param('isi',$qty,$tprice,$pid);
-            // $stmt->execute();
-
           }
+
+         
           
 ?>

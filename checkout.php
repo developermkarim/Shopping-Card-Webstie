@@ -11,12 +11,11 @@ $result = $stmt->get_result();
 while ($row = $result->fetch_assoc()) {
    $grand_total += $row['total_price'];
    $allItems[] = $row['item_and_qty'];
-   $qauntity = $row['quantity'];
+   $qauntity += $row['quantity'];
 
 }
 $included_items = implode(',',$allItems);
-$delivery_charge = ($qauntity * 100);
-$grand_total+= $delivery_charge;
+$delivery_charge += ($qauntity * 100);
 ?>
 
 <!DOCTYPE html>
@@ -75,6 +74,7 @@ $grand_total+= $delivery_charge;
         <form action="" method="post" id="placeOrder">
           <input type="hidden" name="products" value="<?= $included_items; ?>">
           <input type="hidden" name="grand_total" value="<?= $grand_total; ?>">
+          <input type="hidden" name="charge" value="<?= $delivery_charge;?>">
         <div class="form-group">
             <input type="text" name="name" class="form-control" placeholder="Enter Name" required>
           </div>
@@ -109,7 +109,6 @@ $grand_total+= $delivery_charge;
 
   <script type="text/javascript">
   $(document).ready(function() {
-
     // Sending Form data to the server
     $("#placeOrder").submit(function(e) {
       e.preventDefault();

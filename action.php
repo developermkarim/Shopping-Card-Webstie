@@ -85,11 +85,13 @@ if (!$code) {
             $phone = $_POST['phone'];
             $address = $_POST['address'];
             $price_mode = $_POST['pmode'];
+            $delivery_charge = $_POST['charge'];
             $products = $_POST['products']; // this taken from hidden input
             $total_paid = $_POST['grand_total']; // this also taken form hidden input of grand total;
             $data = '';
-            $stmt = $conn->prepare("INSERT INTO orders(name,email,phone,address,pmode,products,amount_paid) VALUES(?,?,?,?,?,?,?)");
-            $stmt->bind_param('sssssss',$name,$email,$phone,$address,$price_mode,$products,$total_paid);
+            $vate = $total_paid*(5/100);
+            $stmt = $conn->prepare("INSERT INTO orders(name,email,phone,address,pmode,products,delivery_charge,amount_paid) VALUES(?,?,?,?,?,?,?,?)");
+            $stmt->bind_param('ssssssss',$name,$email,$phone,$address,$price_mode,$products,$delivery_charge,$total_paid);
             $stmt->execute();
             $stmt2 = $conn->prepare("DELETE FROM cart");
             $stmt2->execute();
@@ -100,8 +102,10 @@ if (!$code) {
             <h4>Your Name : ' . $name . '</h4>
             <h4>Your E-mail : ' . $email . '</h4>
             <h4>Your Phone : ' . $phone . '</h4>
-            <h4>Total Amount Paid : ' . number_format($total_paid,2) . '</h4>
-            <h4>Payment Mode : ' . $total_paid . '</h4>
+            <h4>Total Amount of Products : ' . number_format($total_paid,2) . '</h4>
+            <h4> Delivery Charge: '.number_format($delivery_charge,2) .' </h4>
+            <h4> Vate: '.number_format($vate,2) .' </h4>
+            <h4>All Payment (including vate) : ' .number_format(($total_paid + $delivery_charge+$vate),2)  . '</h4>
           </div>';
           echo $data;
 

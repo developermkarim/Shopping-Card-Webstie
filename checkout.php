@@ -135,7 +135,7 @@ $grand_total+= $delivery_charge;
         },
         success: function(response) {
           $("#cart-item").html(response);
-        }
+        } 
       });
     }
   });

@@ -106,7 +106,7 @@ if (!$code) {
           echo $data;
 
           
-
+          echo $button = '<button onClick="window.print()">Print this page</button>';
             }
 
 ?>
